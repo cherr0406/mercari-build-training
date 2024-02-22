@@ -21,15 +21,11 @@ func loadDb(path string) (*sql.DB, error) {
 
 func createTableIfNotExists(db *sql.DB) error {
 	// Create table if not exists
-	file, err := os.Open(DbSchemaPath)
+	bytes, err := os.ReadFile(DbSchemaPath)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-	var schema string
-	if _, err := file.Read([]byte(schema)); err != nil {
-		return err
-	}
+	schema := string(bytes)
 	_, err = db.Exec(schema) // CREATE TABLE IF NOT EXIST ...;
 	return err
 }
