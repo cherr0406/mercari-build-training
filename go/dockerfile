@@ -11,11 +11,11 @@ COPY go/ ./go/
 
 WORKDIR /app/go
 
-RUN go mod tidy
+RUN go mod download
 RUN go build -o ./mercari-build-training ./app/*.go
 
 RUN addgroup -S mercari && adduser -S trainee -G mercari
-# RUN chown -R trainee:mercari /path/to/db
+RUN chown -R trainee:mercari /app
 
 USER trainee
 
