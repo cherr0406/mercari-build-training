@@ -38,6 +38,10 @@ export const ItemList: React.FC<Prop> = (props) => {
       });
   };
 
+  const getImgSrc = (image_name: string) => {
+    return image_name ? server.concat('/image/', image_name) : placeholderImage;
+  };
+
   useEffect(() => {
     if (reload) {
       fetchItems();
@@ -49,8 +53,7 @@ export const ItemList: React.FC<Prop> = (props) => {
       {items.map((item) => {
         return (
           <div key={item.id} className="ItemList">
-            {/* TODO: Task 1: Replace the placeholder image with the item image */}
-            <img src={placeholderImage} />
+            <img src={getImgSrc(item.image_name)} alt="item" />
             <p>
               <span>Name: {item.name}</span>
               <br />
