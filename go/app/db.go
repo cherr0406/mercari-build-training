@@ -46,24 +46,24 @@ func scanCategory(rows *sql.Rows) (*Category, error) {
 	return &category, nil
 }
 
-func scanJoinedItem(rows *sql.Rows) (*JoinedItem, error) {
-	var joined_item JoinedItem
-	if err := rows.Scan(&joined_item.Id, &joined_item.Name, &joined_item.CategoryName, &joined_item.ImageName); err != nil {
+func scanResponseItem(rows *sql.Rows) (*ResponseItem, error) {
+	var response_item ResponseItem
+	if err := rows.Scan(&response_item.Id, &response_item.Name, &response_item.Category, &response_item.Image_name); err != nil {
 		return nil, err
 	}
-	return &joined_item, nil
+	return &response_item, nil
 }
 
-func scanJoinedItems(rows *sql.Rows) (*JoinedItems, error) {
-	var joined_items JoinedItems
+func scanResponseItems(rows *sql.Rows) (*ResponseItems, error) {
+	var response_items ResponseItems
 	for rows.Next() {
-		joined_item, err := scanJoinedItem(rows)
+		response_item, err := scanResponseItem(rows)
 		if err != nil {
 			return nil, err
 		}
-		joined_items.Items = append(joined_items.Items, *joined_item)
+		response_items.Items = append(response_items.Items, *response_item)
 	}
-	return &joined_items, nil
+	return &response_items, nil
 }
 
 func loadItemById(db *sql.DB, id int) (*Item, error) {
@@ -104,14 +104,14 @@ func insertCategory(db *sql.DB, category_name string) error {
 	return err
 }
 
-func loadJoinedItemsByKeyword(db *sql.DB, keyword string) (*JoinedItems, error) {
+func loadResponseItemsByKeyword(db *sql.DB, keyword string) (*ResponseItems, error) {
 	query := JoinAllQuery + " AND items.name LIKE CONCAT('%', ?, '%')"
 	rows, err := db.Query(query, keyword)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	return scanJoinedItems(rows)
+	return scanResponseItems(rows)
 }
 
 func loadCategoryByName(db *sql.DB, category_name string) (*Category, error) {
@@ -126,7 +126,7 @@ func loadCategoryByName(db *sql.DB, category_name string) (*Category, error) {
 	return scanCategory(rows)
 }
 
-func joinItemAndCategory(db *sql.DB, item Item) (*JoinedItem, error) {
+func joinItemAndCategory(db *sql.DB, item Item) (*ResponseItem, error) {
 	category, err := loadCategoryById(db, item.CategoryId)
 	if err != nil {
 		return nil, err
@@ -135,16 +135,16 @@ func joinItemAndCategory(db *sql.DB, item Item) (*JoinedItem, error) {
 		return nil, nil
 	}
 
-	joined_item := JoinedItem{Id: item.Id, Name: item.Name, ImageName: item.ImageName, CategoryName: category.Name}
-	return &joined_item, nil
+	response_item := ResponseItem{Id: item.Id, Name: item.Name, Category: category.Name, Image_name: item.ImageName}
+	return &response_item, nil
 }
 
-func joinAll(db *sql.DB) (*JoinedItems, error) {
+func joinAll(db *sql.DB) (*ResponseItems, error) {
 	// Join category name to items
 	rows, err := db.Query(JoinAllQuery)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	return scanJoinedItems(rows)
+	return scanResponseItems(rows)
 }

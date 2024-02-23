@@ -37,13 +37,13 @@ type Category struct {
 	Name string `db:"name"`
 }
 
-type JoinedItems struct {
-	Items []JoinedItem `json:"items"`
+type ResponseItems struct {
+	Items []ResponseItem `json:"items"`
 }
 
-type JoinedItem struct {
-	Id           int    `db:"id"`
-	Name         string `db:"name"`
-	CategoryName string `db:"name"`
-	ImageName    string `db:"image_name"`
+type ResponseItem struct {
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	Category   string `json:"category"`
+	Image_name string `json:"image_name"`
 }

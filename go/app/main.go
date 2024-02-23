@@ -77,11 +77,11 @@ func getAllItems(c echo.Context) error {
 	}
 	defer db.Close()
 
-	joined_items, err := joinAll(db)
+	response_items, err := joinAll(db)
 	if err != nil {
 		return httpErrorHandler(err, c, http.StatusInternalServerError, "Failed to join items and categories")
 	}
-	return c.JSON(http.StatusOK, joined_items)
+	return c.JSON(http.StatusOK, response_items)
 }
 
 func getItemById(c echo.Context) error {
@@ -111,12 +111,12 @@ func getItemById(c echo.Context) error {
 	}
 
 	// Join item and category name
-	joined_item, err := joinItemAndCategory(db, *item)
+	response_item, err := joinItemAndCategory(db, *item)
 	if err != nil {
 		return httpErrorHandler(err, c, http.StatusInternalServerError, "Failed to join item and category")
 
 	}
-	return c.JSON(http.StatusOK, joined_item)
+	return c.JSON(http.StatusOK, response_item)
 }
 
 func getImg(c echo.Context) error {
@@ -146,13 +146,13 @@ func searchItems(c echo.Context) error {
 	}
 	defer db.Close()
 
-	joined_items, err := loadJoinedItemsByKeyword(db, keyword)
+	response_items, err := loadResponseItemsByKeyword(db, keyword)
 	if err != nil {
 		return httpErrorHandler(err, c, http.StatusInternalServerError, "Failed to search items")
 	}
 
-	c.Logger().Infof("items: %+v", joined_items)
-	return c.JSON(http.StatusOK, joined_items)
+	c.Logger().Infof("items: %+v", response_items)
+	return c.JSON(http.StatusOK, response_items)
 }
 
 func addCategory(c echo.Context) error {
