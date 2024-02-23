@@ -6,7 +6,6 @@ import (
 	"os"
 	"path"
 	"strconv"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -123,10 +122,10 @@ func getImg(c echo.Context) error {
 	// Create image path
 	imgPath := path.Join(ImgDir, c.Param("imageFilename"))
 
-	if !strings.HasSuffix(imgPath, ".jpg") {
-		res := Response{Message: "Image path does not end with .jpg"}
-		return c.JSON(http.StatusBadRequest, res)
-	}
+	// if !strings.HasSuffix(imgPath, ".jpg") {
+	// 	res := Response{Message: "Image path does not end with .jpg"}
+	// 	return c.JSON(http.StatusBadRequest, res)
+	// }
 	if _, err := os.Stat(imgPath); err != nil {
 		c.Logger().Debugf("Image not found: %s", imgPath) // log level: "DEBUG"
 		imgPath = path.Join(ImgDir, "default.jpg")
