@@ -49,16 +49,22 @@ export const ItemList: React.FC<Prop> = (props) => {
   }, [reload]);
 
   return (
-    <div>
+    <div className="ItemList-Wrapper">
       {items.map((item) => {
         return (
-          <div key={item.id} className="ItemList">
-            <img src={getImgSrc(item.image_name)} alt="item" />
-            <p>
-              <span>Name: {item.name}</span>
-              <br />
-              <span>Category: {item.category}</span>
-            </p>
+          <div className="ItemContainer CircleAnimeBase" key={item.id}>
+            <div className="ItemBg ItemList">
+              <div className="ItemCategory">
+                <span>{item.category}</span>
+              </div>
+            </div>
+            <div className="ItemList">
+              <img src={getImgSrc(item.image_name)} alt="item" />
+              <p className="ItemName CircleAnimeTarget">
+                <span>Name:</span>
+                <span>{item.name}</span>
+              </p>
+            </div>
           </div>
         );
       })}
