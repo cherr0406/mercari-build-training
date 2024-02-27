@@ -14,3 +14,12 @@ class Solution:
             # using abs() allows duplication
             nums[abs(num) - 1] = -abs(nums[abs(num) - 1])
         return [i + 1 for i in range(len(nums)) if nums[i] > 0]
+
+    def findDisappearedNumbers3(self, nums: list[int]) -> list[int]:
+        # simple list
+        # Time complexity: O(n)
+        # Space complexity: O(n) for creating sets
+        appeared = [False] * len(nums)
+        for n in nums:
+            appeared[n - 1] = True
+        return [i + 1 for i in range(len(nums)) if not appeared[i]]  # O(n)
